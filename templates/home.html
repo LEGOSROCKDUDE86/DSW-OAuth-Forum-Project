@@ -10,11 +10,16 @@
 <br>
 <p>-Keep discussions on topic (if you mention Big Bird, you WILL BE BANNED)</p>
 <p>-Be appropriate. No profanity (Mr. Snuffeupagus is only 4 1/2 years old)</p>
-  <form action='/posted' method="post">
+{% if logged_in %}
+<form action='/posted' method="post">
     <textarea name="message" style="width:100%; height:100px;"></textarea>
     <br>
     <input type="submit" value="Post">
-  </form>
+</form>
+{% else %}
+<p>Please log in to post</p>
+{% endif %}
+
   
   {{ past_posts }}
 

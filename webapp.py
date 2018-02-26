@@ -28,6 +28,7 @@ github = oauth.remote_app(
 #use a JSON file to store the past posts.  A global list variable doesn't work when handling multiple requests coming in and being handled on different threads
 #Create and set a global variable for the name of your JSON file here.  The file will be created on Heroku, so you don't need to make it in GitHub
 file = "posts.json"
+os.system("echo '[]'>" + file)
 def update_data(post):
     try:
         with open('posts.json','r+') as f:

@@ -1,6 +1,5 @@
-from flask import Flask, redirect, url_for, session, request, jsonify, Markup
+from flask import Flask, redirect, url_for, session, request, jsonify, Markup, render_template
 from flask_oauthlib.client import OAuth
-from flask import render_template
 
 import pprint
 import os
@@ -38,11 +37,15 @@ def update_data(post):
             f.truncate()
             json.dump(data,f)
     except:
-        print "error"
+        print("error")
     
 def posts_to_html():
     with open('posts.json') as f
             data = json.load(f)
+    posts = ""
+    for x in range(0, len(data)):
+        posts += Markup("<p>" + data[x] + "</p><br>")
+    return posts
             
 @app.context_processor
 def inject_logged_in():
@@ -54,9 +57,8 @@ def home():
 
 @app.route('/posted', methods=['POST'])
 def post():
-    
-     update_data(post)
-    #Every post should include the username of the poster and text of the post. 
+    message = str(session['user_data']['login'] + request.form['post'])
+    update_data(message)
     return render_template('home.html', past_posts=posts_to_html())
 
 #redirect to GitHub's OAuth page and confirm callback URL

@@ -43,10 +43,10 @@ def update_data(post):
 def posts_to_html():
     with open('posts.json') as f
             data = json.load(f)
-#     posts = ""
+    posts = ""
 #     for x in range(0, len(data)):
 #         posts += Markup("<p>" + data[x] + "</p><br>")
-    return print(data)
+    return posts
             
 @app.context_processor
 def inject_logged_in():

@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, session, request, jsonify, Markup, render_template
-from flask_oauthlib.client import OAuth
+from flask_oauth import OAuth
 
 import pprint
 import os

@@ -31,7 +31,7 @@ file = "posts.json"
 os.system("echo '[]'>" + file)
 def update_data(post):
     try:
-        with open('posts.json','r+') as f:
+        with open(file,'r+') as f:
             data = json.load(f)
             data.append(post)
             f.seek(0)
@@ -41,7 +41,7 @@ def update_data(post):
         print("error")
     
 def posts_to_html():
-    with open('posts.json') as f
+    with open('posts.json', 'r') as f:
             data = json.load(f)
     posts = ""
     for x in data:

@@ -40,17 +40,17 @@ def update_data(post):
     except:
         print("error")
     
-# def posts_to_html():
-#     with open('posts.json') as f
-#             data = json.load(f)
-#     posts = ""
-#     for x in range(0, len(data)):
-#         posts += Markup("<p>" + data[x] + "</p><br>")
-#     return posts
+def posts_to_html():
+    with open('posts.json') as f
+            data = json.load(f)
+    posts = ""
+    for x in range(0, len(data)):
+        posts += Markup("<p>" + data[x] + "</p><br>")
+    return posts
             
-@app.context_processor
-def inject_logged_in():
-    return {"logged_in":('github_token' in session)}
+# @app.context_processor
+# def inject_logged_in():
+#     return {"logged_in":('github_token' in session)}
 
 @app.route('/')
 def home():

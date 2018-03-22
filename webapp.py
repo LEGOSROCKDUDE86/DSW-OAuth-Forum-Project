@@ -45,7 +45,7 @@ def posts_to_html():
             data = json.load(f)
     posts = ""
     for x in data:
-        posts += Markup("<p>" + data[x] + "</p><br>")
+        posts += Markup("<p>" + x + "</p><br>")
     return posts
             
 @app.context_processor

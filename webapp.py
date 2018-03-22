@@ -42,7 +42,7 @@ def update_data(post):
     
 def posts_to_html():
     ret = ""
-    ret +=  Markup("<table> <tr> <th>UserName</th> <th>Post</th> </tr>")
+    ret +=  Markup("<table> <tr> <th>Name  </th> <th>Comment</th> </tr>")
     try:
         with open('posts.json','r') as f:
             data = json.load(f)
@@ -66,7 +66,7 @@ def home():
 @app.route('/posted', methods=['POST'])
 def post():
     print(request.form['message'])
-    message = [str(session['user_data']['login']),request.form['message']]
+    message = [str(session['user_data']['login']), request.form['message']]
     update_data(message)
     return render_template('home.html', past_posts=posts_to_html())
 

@@ -58,8 +58,10 @@ def home():
 
 @app.route('/posted', methods=['POST'])
 def post():
-    update_data([session['user_data']['login'], request.form['post']])
-    render_template('home.html', past_posts=posts_to_html())
+    print(request.form['message'])
+    message = [str(session['user_data']['login']),request.form['message']]
+    update_posts(message)
+    return render_template('home.html', past_posts=posts_to_html())
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')

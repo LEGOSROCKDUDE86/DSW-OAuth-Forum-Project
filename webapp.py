@@ -46,7 +46,7 @@ def posts_to_html():
     posts = ""
     for x in data:
         posts += Markup("<p>" + x + "</p><br>")
-    return posts
+    return str(posts)
             
 @app.context_processor
 def inject_logged_in():

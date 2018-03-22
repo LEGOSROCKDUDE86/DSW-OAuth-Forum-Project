@@ -60,7 +60,7 @@ def home():
 def post():
     print(request.form['message'])
     message = [str(session['user_data']['login']),request.form['message']]
-    update_posts(message)
+    update_data(message)
     return render_template('home.html', past_posts=posts_to_html())
 
 #redirect to GitHub's OAuth page and confirm callback URL

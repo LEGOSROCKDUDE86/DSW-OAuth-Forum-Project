@@ -41,12 +41,19 @@ def update_data(post):
         print("error")
     
 def posts_to_html():
-    with open('posts.json', 'r') as f:
+    ret = ""
+    ret +=  Markup("<table> <tr> <th>UserName</th> <th>Post</th> </tr>")
+    try:
+        with open('posts.json','r') as f:
             data = json.load(f)
-    posts = ""
-    for x in data:
-        posts += Markup("<p>" + x + "</p><br>")
-    return str(posts)
+            for i in data:
+                print(i)
+                ret += Markup("<tr> <td>" + i[0] +  "</td> <td>" +i[1] + "</td></tr>") 
+    except:
+        print("error")
+    ret += Markup("</table>")
+    print(ret)
+    return ret
             
 @app.context_processor
 def inject_logged_in():

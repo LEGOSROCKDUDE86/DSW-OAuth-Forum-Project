@@ -40,33 +40,32 @@ def update_data(post):
     except:
         print("error")
     
-# def posts_to_html():
-#     ret = ""
-#     ret +=  Markup("<table> <tr> <th>Name  </th> <th>Comment</th> </tr>")
-#     try:
-#         with open('posts.json','r') as f:
-#             data = json.load(f)
-#             for i in data:
-#                 print(i)
-#                 ret += Markup("<tr> <td>" + i[0] +  "</td> <td>" +i[1] + "</td></tr>") 
-#     except:
-#         print("error")
-#     ret += Markup("</table>")
-#     print(ret)
-#     return ret
-
 def posts_to_html():
-    post_table = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
+    ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     try:
-        with open('posts.json', 'r') as forumPosts:
-            posts = json.load(forumPosts)
-            for p in posts:
-                        print(p)
-                        post_table += Markup("<tr><td>" + p['username'] + "</td><td>" + p["message"] + "</td></tr>")
-            post_table += Markup("</table>")
-    except Exception as e:
-        print(e)
-    return post_table
+        with open('posts.json','r') as f:
+            data = json.load(f)
+            for i in data:
+                print(i)
+                ret += Markup("<tr><td>" + i[0] + "</td><td>" + i[1] + "</td></tr>") 
+    except:
+        print("error")
+    ret += Markup("</table>")
+    print(ret)
+    return ret
+
+# def posts_to_html():
+
+#     try:
+#         with open('posts.json', 'r') as forumPosts:
+#             posts = json.load(forumPosts)
+#             for p in posts:
+#                         print(p)
+#                         post_table += Markup("<tr><td>" + p['username'] + "</td><td>" + p["message"] + "</td></tr>")
+#             post_table += Markup("</table>")
+#     except Exception as e:
+#         print(e)
+#     return post_table
             
 @app.context_processor
 def inject_logged_in():

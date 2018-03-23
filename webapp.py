@@ -53,19 +53,6 @@ def posts_to_html():
     ret += Markup("</table>")
     print(ret)
     return ret
-
-# def posts_to_html():
-
-#     try:
-#         with open('posts.json', 'r') as forumPosts:
-#             posts = json.load(forumPosts)
-#             for p in posts:
-#                         print(p)
-#                         post_table += Markup("<tr><td>" + p['username'] + "</td><td>" + p["message"] + "</td></tr>")
-#             post_table += Markup("</table>")
-#     except Exception as e:
-#         print(e)
-#     return post_table
             
 @app.context_processor
 def inject_logged_in():

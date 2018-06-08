@@ -51,13 +51,14 @@ def update_data(post):
     
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
-    try:
         for i in posts.find():
-        	ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
-    except:
-        print("error")
-    ret += Markup("</table>")
-    return ret
+		s = str(i['_id'])
+		if 'user_data' in session:
+        		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+		else:
+			ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+		ret += Markup("</table>")
+	return ret
             
 @app.context_processor
 def inject_logged_in():

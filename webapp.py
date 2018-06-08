@@ -25,7 +25,7 @@ url = 'mongodb://{}:{}@{}:{}/{}'.format(
         os.environ["MONGO_DBNAME"])
 client = pymongo.MongoClient(url)
 db = client[os.environ["MONGO_DBNAME"]]
-collection = db['collection']
+posts = db['posts']
 
 #Set up GitHub as OAuth provider
 github = oauth.remote_app(
@@ -57,7 +57,7 @@ def loadData(newData):
             json.dump(data,f)
     except:
         print("Error Loading Data")
-    db.collection.insert({"posts":newData})
+    db.posts.insert({"username":newData[0], "post":newData[1]})
     
 @app.context_processor
 def inject_logged_in():
@@ -74,14 +74,14 @@ def home():
 def delete():
     id = ObjectId(request.form['delete'])
     print(id)
-    print(db.collection.delete_one({'_id':id}))
+    print(db.posts.delete_one({'_id':id}))
     return home()
 	
 def posts_to_html():
     ret = ""
-    ret +=  Markup("<table> <tr> <th>UserName</th> <th>Post</th> <th>Delete</th></tr>")
+    ret +=  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
 	
-    for i in collection.find():
+    for i in posts.find():
         s = str(i['_id'])
         if 'user_data' in session:
             ret += Markup("<tr> <td>" + i['posts'][0] +  "</td> <td>" +i['posts'][1] + "</td></tr> <th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")

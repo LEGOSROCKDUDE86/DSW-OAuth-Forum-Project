@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, session, request, jsonify, Markup, render_template
 from flask_oauthlib.client import OAuth
+from bson.objectid import ObjectId
 
 import pprint
 import os
@@ -51,7 +52,7 @@ def home():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    id = request.form['delete']
+    id = ObjectId(request.form['delete'])
     print(id)
     print(db.posts.delete_one({'_id':id}))
     return render_template('home.html', past_posts=posts_to_html())#, loggedIn = log)

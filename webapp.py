@@ -57,6 +57,7 @@ def delete():
     return render_template('home.html', past_posts=posts_to_html())#, loggedIn = log)
 	
 def posts_to_html():
+    ret = ""
     ret +=  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     for i in posts.find():
         s = str(i['_id'])

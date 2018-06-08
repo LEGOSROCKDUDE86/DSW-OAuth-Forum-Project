@@ -44,8 +44,8 @@ os.system("echo '[]'>" + file)
 def update_data(post):
     try:
     	posts.insert_one({"username":post[0]})#,{"post":post[1]})
-    	for key in posts.find():
-	    print(key)
+    for key in posts.find():
+	print(key)
     except:
         print("error")
     

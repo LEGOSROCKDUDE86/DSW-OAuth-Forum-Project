@@ -62,7 +62,7 @@ def posts_to_html():
         with open('posts.json','r') as f:
             data = json.load(f)
             for i in data:
-                print(i)
+                #print(i)
                 ret += Markup("<tr><td>" + i[0] + "</td><td>" + i[1] + "</td></tr>") 
     except:
         print("error")

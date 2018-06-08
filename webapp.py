@@ -48,15 +48,15 @@ os.system("echo '[]'>" + file)
 def update_posts(post):
 #here we need to load in the database such that the data returned will be appended to the db
     print(post)
-    try:
-        with open('posts.json','r+') as f:
-            data = json.load(f)
-            data.append(post)
-            f.seek(0)
-            f.truncate()
-            json.dump(data,f)
-    except:
-        print("error")
+#    try:
+#        with open('posts.json','r+') as f:
+#            data = json.load(f)
+#            data.append(post)
+#            f.seek(0)
+#            f.truncate()
+#            json.dump(data,f)
+#    except:
+#        print("error")
     db.posts.insert({"username":post[0], "post":post[1]})
     
 @app.context_processor

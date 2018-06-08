@@ -56,15 +56,15 @@ def delete():
     return render_template('home.html', past_posts=posts_to_html())
 	
 def posts_to_html():
-    ret =  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
+    pth =  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     for i in posts.find():
-        s = str(i['_id'])
+        q = str(i['_id'])
         if 'user_data' in session:
-            ret += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "</td></tr><th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")
+            pth += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "</td><th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + q + "\">delete</button></form></tr></th>")
         else: 
-            ret += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "</td><td></td>")
-    ret += Markup("</table>")
-    return ret
+            pth += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "</td></tr>")
+    pth += Markup("</table>")
+    return pth
             
 @app.route('/posted', methods=['POST'])
 def post():

@@ -60,7 +60,7 @@ def posts_to_html():
     for i in posts.find():
         q = str(i['_id'])
         if 'user_data' in session:
-            pth += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "<th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + q + "\">delete</button></form></tr></th>")
+            pth += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "<form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + q + "\">delete</button></form></th></tr></th>")
         else: 
             pth += Markup("<tr><td>" + i['username'] + "</td> <td>" +i['post'] + "</td></tr>")
     pth += Markup("</table>")

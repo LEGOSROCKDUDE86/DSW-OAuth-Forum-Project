@@ -43,18 +43,11 @@ file = "posts.json"
 os.system("echo '[]'>" + file)
 def update_data(post):
     try:
-        with open(file,'r+') as f:
-            data = json.load(f)
-            data.append(post)
-            f.seek(0)
-            f.truncate()
-            json.dump(data,f)
+    	posts.insert_one({post[0]:post[1]})
+    	for key in posts.find():
+	    print(key)
     except:
         print("error")
-    posts.insert_one({post[0]:post[1]})
-    for key in posts.find():
-	    print(key)
-
     
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")

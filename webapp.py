@@ -66,7 +66,10 @@ def inject_logged_in():
 
 @app.route('/')
 def home():
-    return render_template('home.html', past_posts=posts_to_html())
+	if 'message; in request.form:
+    		return render_template('home.html', past_posts=posts_to_html())
+	else:
+		return render_template('home.html')
 
 @app.route('/posted', methods=['POST'])
 def post():

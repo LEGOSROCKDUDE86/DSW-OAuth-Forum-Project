@@ -42,7 +42,7 @@ posts = db['posts']
 #file = "posts.json"
 #os.system("echo '[]'>" + file)
 def update_data(post):
-    posts.insert_one({post[0]:post[1]})#,{"post":post[1]})
+    posts.insert_one({'username':post[0]})#,{"post":post[1]})
     
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
@@ -50,9 +50,9 @@ def posts_to_html():
     for i in data:
         s = str(i['_id'])
         if 'user_data' in session:
-		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+		ret += Markup("<tr><td>" + i['username'] + "</td><td>" + i['username'] + "</td></tr>") 
 	else:
-		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+		ret += Markup("<tr><td>" + i['username'] + "</td><td>" + i['username'] + "</td></tr>") 
 	ret += Markup("</table>")
 	return ret
             

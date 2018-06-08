@@ -51,7 +51,7 @@ def home():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    id = ObjectId(request.form['delete'])
+    id = str(request.form['delete'])
     db.posts.delete_one({'_id':id})
     return render_template('home.html', past_posts=posts_to_html())
 	

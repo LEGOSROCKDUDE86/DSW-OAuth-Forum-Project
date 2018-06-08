@@ -1,18 +1,31 @@
-from flask import Flask, redirect, url_for, session, request, jsonify, Markup, render_template
+from flask import Flask, redirect, url_for, session, request, jsonify, Markup
 from flask_oauthlib.client import OAuth
-
+from flask import render_template
+#please work 
 import pprint
 import os
 import json
+from bson.objectid import ObjectId
 import pymongo
-import sys
-
+ 
+ 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 app = Flask(__name__)
 
 app.debug = True #Change this to False for production
 
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
 oauth = OAuth(app)
+
+url = 'mongodb://{}:{}@{}:{}/{}'.format(
+        os.environ["MONGO_USERNAME"],
+        os.environ["MONGO_PASSWORD"],
+        os.environ["MONGO_HOST"],
+        os.environ["MONGO_PORT"],
+        os.environ["MONGO_DBNAME"])
+client = pymongo.MongoClient(url)
+db = client[os.environ["MONGO_DBNAME"]]
+collection = db['collection']
 
 #Set up GitHub as OAuth provider
 github = oauth.remote_app(
@@ -27,57 +40,84 @@ github = oauth.remote_app(
     authorize_url='https://github.com/login/oauth/authorize' #URL for github's OAuth login
 )
 
-url = 'mongodb://{}:{}@{}:{}/{}'.format(
-        os.environ["MONGO_USERNAME"],
-        os.environ["MONGO_PASSWORD"],
-        os.environ["MONGO_HOST"],
-        os.environ["MONGO_PORT"],
-        os.environ["MONGO_DBNAME"])
-client = pymongo.MongoClient(url)
-db = client[os.environ["MONGO_DBNAME"]]
-posts = db['posts']
 
 #use a JSON file to store the past posts.  A global list variable doesn't work when handling multiple requests coming in and being handled on different threads
-#Create and set a global variable for the name of your JSON file here.  The file will be created on Heroku, so you don't need to make it in GitHub
-#file = "posts.json"
-#os.system("echo '[]'>" + file)
-def update_data(post):
-    posts.insert_one({'username':post[0]})#,{"post":post[1]})
+#Create and set a global variable for the name of you JSON file here.  The file will be created on Heroku, so you don't need to make it in GitHub
+file = 'postData.json'
+os.system("echo '[]'>" + file)
+def loadData(newData):
+#here we need to load in the database such that the data returned will be appended to the db
+    print(newData)
+    try:
+        with open('postData.json','r+') as f:
+            data = json.load(f)
+            data.append(newData)
+            f.seek(0)
+            f.truncate()
+            json.dump(data,f)
+    except:
+        print("Error Loading Data")
+    db.collection.insert({"posts":newData})
     
-def posts_to_html():
-    ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
-    data = posts.find()
-    for i in data:
-        s = str(i['_id'])
-        if 'user_data' in session:
-		ret += Markup("<tr><td>" + i['username'] + "</td><td>" + i['username'] + "</td></tr>") 
-	else:
-		ret += Markup("<tr><td>" + i['username'] + "</td><td>" + i['username'] + "</td></tr>") 
-	ret += Markup("</table>")
-	return ret
-            
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
 
 @app.route('/')
 def home():
-    if 'message; in request.form:
-    return render_template('home.html', past_posts=posts_to_html())
-    else:
-    return render_template('home.html')
+    log = False
+    if 'user_data' in session:
+        log = True
+    return render_template('home.html', past_posts=posts_to_html(), loggedIn = log)
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    id = ObjectId(request.form['delete'])
+    print(id)
+    print(db.collection.delete_one({'_id':id}))
+    return home()
+	
+def posts_to_html():
+    ret = ""
+    ret +=  Markup("<table> <tr> <th>UserName</th> <th>Post</th> <th>Delete</th></tr>")
+	
+    for i in collection.find():
+        s = str(i['_id'])
+        if 'user_data' in session:
+            ret += Markup("<tr> <td>" + i['posts'][0] +  "</td> <td>" +i['posts'][1] + "</td></tr> <th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")
+        else: 
+            ret += Markup("<tr> <td>" + i['posts'][0] +  "</td> <td>" +i['posts'][1] + "</td><td></td>")
+    #try:
+    #here we have to get data from the database such that it is readable to the html 
+    #    with open('postData.json','r') as f:
+    #        data = json.load(f)
+    #        for i in data:
+    #            print(i)
+    #            ret += Markup("<tr> <td>" + i[0] +  "</td> <td>" +i[1] + "</td></tr>") 
+    #except:
+    #    print("error")
+    ret += Markup("</table>")
+    print(ret)
+    
+    return ret
+            
+            
 
 @app.route('/posted', methods=['POST'])
 def post():
-    #print(request.form['message'])
-    message = [str(session['user_data']['login']), request.form['message']]
-    update_data(message)
-    return render_template('home.html', past_posts=posts_to_html())
+    #print(session['user_data'])
+    print(request.form['message'])
+    message = [str(session['user_data']['login']),request.form['message']]
+    loadData(message)
+    return home()
+    
+    #This function should add the new post to the JSON file of posts and then render home.html and display the posts.  
+    #Every post should include the username of the poster and text of the post. 
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
 def login():   
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
 
 @app.route('/logout')
 def logout():

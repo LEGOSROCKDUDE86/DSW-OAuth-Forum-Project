@@ -51,7 +51,10 @@ def update_data(post):
             json.dump(data,f)
     except:
         print("error")
-    posts.insert_one({post[0]:1})
+    posts.insert_one({post[0]:post[1]})
+    for key in posts.find():
+	    print(key)
+
     
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")

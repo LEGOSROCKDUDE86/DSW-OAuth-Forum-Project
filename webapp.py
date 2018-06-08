@@ -68,14 +68,14 @@ def home():
     log = False
     if 'user_data' in session:
         log = True
-    return render_template('home.html', past_posts=posts_to_html(), loggedIn = log)
+    return render_template('home.html', past_posts=posts_to_html())#, loggedIn = log)
 
 @app.route('/delete', methods=['POST'])
 def delete():
     id = ObjectId(request.form['delete'])
     print(id)
     print(db.posts.delete_one({'_id':id}))
-    return render_template('home.html', past_posts=posts_to_html(), loggedIn = log)
+    return render_template('home.html', past_posts=posts_to_html())#, loggedIn = log)
 	
 def posts_to_html():
     ret = ""

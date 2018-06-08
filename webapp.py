@@ -37,7 +37,6 @@ client = pymongo.MongoClient(url)
 db = client[os.environ["MONGO_DBNAME"]]
 posts = db['posts']
 
-
 def update_posts(post):
     db.posts.insert({"username":post[0], "post":post[1]})
     
@@ -52,47 +51,28 @@ def home():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    id = ObjectId(request.form['delete'])
+    id = request.form['delete']
     print(id)
     print(db.posts.delete_one({'_id':id}))
     return render_template('home.html', past_posts=posts_to_html())#, loggedIn = log)
 	
 def posts_to_html():
-    ret = ""
     ret +=  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
-	
     for i in posts.find():
         s = str(i['_id'])
         if 'user_data' in session:
             ret += Markup("<tr> <td>" + i['username'] +  "</td> <td>" +i['post'] + "</td></tr> <th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")
         else: 
             ret += Markup("<tr> <td>" + i['username'] +  "</td> <td>" +i['post'] + "</td><td></td>")
-    #try:
-    #here we have to get data from the database such that it is readable to the html 
-    #    with open('postData.json','r') as f:
-    #        data = json.load(f)
-    #        for i in data:
-    #            print(i)
-    #            ret += Markup("<tr> <td>" + i[0] +  "</td> <td>" +i[1] + "</td></tr>") 
-    #except:
-    #    print("error")
     ret += Markup("</table>")
-    print(ret)
-    
     return ret
             
-            
-
 @app.route('/posted', methods=['POST'])
 def post():
-    #print(session['user_data'])
     print(request.form['message'])
     message = [str(session['user_data']['login']),request.form['message']]
     update_posts(message)
     return home()
-    
-    #This function should add the new post to the JSON file of posts and then render home.html and display the posts.  
-    #Every post should include the username of the poster and text of the post. 
 
 @app.route('/login')
 def login():   

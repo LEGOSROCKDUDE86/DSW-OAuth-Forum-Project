@@ -39,8 +39,8 @@ posts = db['posts']
 
 #use a JSON file to store the past posts.  A global list variable doesn't work when handling multiple requests coming in and being handled on different threads
 #Create and set a global variable for the name of your JSON file here.  The file will be created on Heroku, so you don't need to make it in GitHub
-file = "posts.json"
-os.system("echo '[]'>" + file)
+#file = "posts.json"
+#os.system("echo '[]'>" + file)
 def update_data(post):
     try:
     	posts.insert_one({"username":post[0]})#,{"post":post[1]})
@@ -52,8 +52,7 @@ def update_data(post):
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     try:
-    	data = posts.find()
-        for i in data:
+        for i in posts.find():
         	ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
     except:
         print("error")

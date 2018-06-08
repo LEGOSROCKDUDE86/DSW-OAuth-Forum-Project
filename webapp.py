@@ -67,7 +67,7 @@ def posts_to_html():
     except:
         print("error")
     ret += Markup("</table>")
-    print(ret)
+    #print(ret)
     return ret
             
 @app.context_processor

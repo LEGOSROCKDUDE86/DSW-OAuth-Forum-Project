@@ -84,9 +84,9 @@ def posts_to_html():
     for i in posts.find():
         s = str(i['_id'])
         if 'user_data' in session:
-            ret += Markup("<tr> <td>" + i['posts'][0] +  "</td> <td>" +i['posts'][1] + "</td></tr> <th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")
+            ret += Markup("<tr> <td>" + i['uername'] +  "</td> <td>" +i['post'] + "</td></tr> <th><form action = \"/delete\" method = \"post\"> <button type=\"submit\" name=\"delete\" value=\"" + s + "\">Delete</button></form></th>")
         else: 
-            ret += Markup("<tr> <td>" + i['posts'][0] +  "</td> <td>" +i['posts'][1] + "</td><td></td>")
+            ret += Markup("<tr> <td>" + i['username'] +  "</td> <td>" +i['post'] + "</td><td></td>")
     #try:
     #here we have to get data from the database such that it is readable to the html 
     #    with open('postData.json','r') as f:

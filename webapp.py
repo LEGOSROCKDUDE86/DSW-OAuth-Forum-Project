@@ -42,22 +42,18 @@ posts = db['posts']
 #file = "posts.json"
 #os.system("echo '[]'>" + file)
 def update_data(post):
-    try:
-    	posts.insert_one({"username":post[0]})#,{"post":post[1]})
-	for key in posts.find():
-	print(key)
-    except:
-        print("error")
+    posts.insert_one({post[0]:post[1]})#,{"post":post[1]})
     
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
-        for i in posts.find():
-		s = str(i['_id'])
-		if 'user_data' in session:
-        		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
-		else:
-			ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
-		ret += Markup("</table>")
+    data = posts.find()
+    for i in data:
+	s = str(i['_id'])
+	if 'user_data' in session:
+        	ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+	else:
+		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+	ret += Markup("</table>")
 	return ret
             
 @app.context_processor
@@ -66,10 +62,10 @@ def inject_logged_in():
 
 @app.route('/')
 def home():
-	if 'message; in request.form:
-    		return render_template('home.html', past_posts=posts_to_html())
-	else:
-		return render_template('home.html')
+    if 'message; in request.form:
+    return render_template('home.html', past_posts=posts_to_html())
+    else:
+    return render_template('home.html')
 
 @app.route('/posted', methods=['POST'])
 def post():

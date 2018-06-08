@@ -1,31 +1,18 @@
-from flask import Flask, redirect, url_for, session, request, jsonify, Markup
+from flask import Flask, redirect, url_for, session, request, jsonify, Markup, render_template
 from flask_oauthlib.client import OAuth
-from flask import render_template
-#please work 
+
 import pprint
 import os
 import json
-from bson.objectid import ObjectId
 import pymongo
- 
- 
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+import sys
+
 app = Flask(__name__)
 
 app.debug = True #Change this to False for production
 
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
 oauth = OAuth(app)
-
-url = 'mongodb://{}:{}@{}:{}/{}'.format(
-        os.environ["MONGO_USERNAME"],
-        os.environ["MONGO_PASSWORD"],
-        os.environ["MONGO_HOST"],
-        os.environ["MONGO_PORT"],
-        os.environ["MONGO_DBNAME"])
-client = pymongo.MongoClient(url)
-db = client[os.environ["MONGO_DBNAME"]]
-posts = db['posts']
 
 #Set up GitHub as OAuth provider
 github = oauth.remote_app(
@@ -39,6 +26,17 @@ github = oauth.remote_app(
     access_token_url='https://github.com/login/oauth/access_token',  
     authorize_url='https://github.com/login/oauth/authorize' #URL for github's OAuth login
 )
+
+url = 'mongodb://{}:{}@{}:{}/{}'.format(
+        os.environ["MONGO_USERNAME"],
+        os.environ["MONGO_PASSWORD"],
+        os.environ["MONGO_HOST"],
+        os.environ["MONGO_PORT"],
+        os.environ["MONGO_DBNAME"])
+client = pymongo.MongoClient(url)
+db = client[os.environ["MONGO_DBNAME"]]
+posts = db['posts']
+
 
 def update_posts(post):
     db.posts.insert({"username":post[0], "post":post[1]})

@@ -56,7 +56,7 @@ def delete():
     return render_template('home.html', past_posts=posts_to_html())
 	
 def posts_to_html():
-    pth =  Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th><th></th></tr>")
+    pth =  Markup("<br><table class='table table-bordered'><tr><th>User</th><th>Post</th><th></th></tr>")
     for i in posts.find():
         q = str(i['_id'])
         if 'user_data' in session:

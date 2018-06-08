@@ -48,9 +48,9 @@ def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     data = posts.find()
     for i in data:
-	s = str(i['_id'])
-	if 'user_data' in session:
-        	ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
+        s = str(i['_id'])
+        if 'user_data' in session:
+		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
 	else:
 		ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
 	ret += Markup("</table>")

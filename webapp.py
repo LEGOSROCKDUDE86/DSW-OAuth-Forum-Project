@@ -43,7 +43,7 @@ file = "posts.json"
 os.system("echo '[]'>" + file)
 def update_data(post):
     try:
-    	posts.insert_one({post[0]:post[1]})
+    	posts.insert_one({"username":post[0]}, {"post":post[1]})
     	for key in posts.find():
 	    print(key)
     except:
@@ -52,15 +52,12 @@ def update_data(post):
 def posts_to_html():
     ret = Markup("<table class='table table-bordered'><tr><th>User</th><th>Post</th></tr>")
     try:
-        with open('posts.json','r') as f:
-            data = posts.find()
-            for i in data:
-                #print(i)
-                ret += Markup("<tr><td>" + i[0] + "</td><td>" + i[1] + "</td></tr>") 
+    	data = posts.find()
+        for i in data:
+        	ret += Markup("<tr><td>" + i["username"] + "</td><td>" + i["post"] + "</td></tr>") 
     except:
         print("error")
     ret += Markup("</table>")
-    #print(ret)
     return ret
             
 @app.context_processor
